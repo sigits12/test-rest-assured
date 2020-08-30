@@ -85,4 +85,47 @@ public class myFirstRestAssuredClass {
         String idEmployee = response.path("id");
         System.out.println("ID employee = " + idEmployee);
     }
+
+    @Test
+    public void updateUser(){
+        String bodyRequest = "{\n" +
+                "    \"name\": \"Andi\",\n" +
+                "    \"job\": \"Developer\"\n" +
+                "}\n";
+
+        Response response = given()
+                .baseUri(secondUrl)
+                .basePath("/api")
+                .contentType(ContentType.JSON)
+                .body(bodyRequest)
+                .post("/users");
+
+        response.getBody().prettyPrint();
+
+        Assert.assertEquals(response.getStatusCode(), 201);
+        Assert.assertEquals(response.path("name"), "Andi");
+        Assert.assertEquals(response.path("job"), "Developer");
+
+        String idUser = response.path("id");
+
+        String bodyUpdateRequest = "{\n" +
+                "    \"name\": \"Andi S\",\n" +
+                "    \"job\": \"Back-end Developer\"\n" +
+                "}\n";
+
+        Response updateResponse = given()
+                .baseUri(secondUrl)
+                .basePath("/api")
+                .contentType(ContentType.JSON)
+                .body(bodyUpdateRequest)
+                .pathParam("id", idUser)
+                .put("/users/{id}");
+
+        updateResponse.getBody().prettyPrint();
+
+        Assert.assertEquals(updateResponse.getStatusCode(), 200);
+        Assert.assertEquals(updateResponse.path("name"), "Andi S");
+        Assert.assertEquals(updateResponse.path("job"), "Back-end Developer");
+
+    }
 }
