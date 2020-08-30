@@ -126,6 +126,37 @@ public class myFirstRestAssuredClass {
         Assert.assertEquals(updateResponse.getStatusCode(), 200);
         Assert.assertEquals(updateResponse.path("name"), "Andi S");
         Assert.assertEquals(updateResponse.path("job"), "Back-end Developer");
+    }
 
+    @Test
+    public void deleteUser(){
+        String bodyRequest = "{\n" +
+                "    \"name\": \"Andi\",\n" +
+                "    \"job\": \"Developer\"\n" +
+                "}\n";
+
+        Response response = given().log().all()
+                .baseUri(secondUrl)
+                .basePath("/api")
+                .contentType(ContentType.JSON)
+                .body(bodyRequest)
+                .post("/users");
+
+        Assert.assertEquals(response.getStatusCode(), 201);
+        Assert.assertEquals(response.path("name"), "Andi");
+        Assert.assertEquals(response.path("job"), "Developer");
+
+        String idUser = response.path("id");
+
+        Response deleteResponse = given().log().all()
+                .baseUri(secondUrl)
+                .basePath("/api")
+                .contentType(ContentType.JSON)
+                .pathParam("id", idUser)
+                .delete("/users/{id}");
+
+        deleteResponse.getBody().prettyPrint();
+
+        Assert.assertEquals(deleteResponse.getStatusCode(), 204);
     }
 }
