@@ -14,8 +14,7 @@ public class UserController {
 
     private final static String baseUri = "http://localhost:8080";
 
-    public Response getAllStudents() {
-
+    public Response getAllUsers() {
         Response response = given()
                 .log()
                 .all()
@@ -26,7 +25,20 @@ public class UserController {
                 .get("/users");
 
         return response;
+    }
 
+    public Response getSingleUser(Long id) {
+        Response response = given()
+                .log()
+                .all()
+                .baseUri(baseUri)
+                .basePath("/api")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .pathParam("id", id)
+                .get("/users/{id}");
+
+        return response;
     }
 
 }
