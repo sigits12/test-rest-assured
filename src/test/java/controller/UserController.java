@@ -3,6 +3,8 @@ package controller;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import model.User;
+
 import static io.restassured.RestAssured.given;
 
 /**
@@ -39,6 +41,22 @@ public class UserController {
                 .get("/users/{id}");
 
         return response;
+    }
+
+    public Response addUser(User userRequest) {
+
+        Response response = given()
+                .log()
+                .all()
+                .baseUri(baseUri)
+                .basePath("/api")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(userRequest)
+                .post("/users");
+
+        return response;
+
     }
 
 }

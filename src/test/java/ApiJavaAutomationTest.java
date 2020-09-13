@@ -2,6 +2,7 @@ import com.github.javafaker.Faker;
 import controller.UserController;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
+import model.User;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,6 +45,27 @@ public class ApiJavaAutomationTest {
         System.out.println("The response status is " + statusCode);
 
         Assert.assertThat(responseGetSingle.getBody().asString(), JsonSchemaValidator.matchesJsonSchemaInClasspath("schemas/get-single-user.json"));
+
+    }
+
+    @Test
+    public void addUser() {
+        // Serialization
+        User userRequest = new User();
+        userRequest.setName(generateRandomName());
+        userRequest.setCountry(generateRandomCountry());
+
+        Response response = userController.addUser(userRequest);
+
+        int statusCode = response.getStatusCode();
+        Assert.assertEquals(200, statusCode);
+        System.out.println("The response status is " + statusCode);
+
+        // Deserialization
+        User userResponse = response.getBody(). as(User.class);
+        System.out.println("id\t : " + userResponse.getId());
+        System.out.println("name\t : " + userResponse.getName());
+        System.out.println("country\t : " + userResponse.getCountry());
 
     }
 
