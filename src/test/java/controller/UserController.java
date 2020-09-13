@@ -1,6 +1,7 @@
 package controller;
 
 
+import defaultrequest.DefaultRequest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import model.User;
@@ -12,31 +13,19 @@ import static io.restassured.RestAssured.given;
  *
  * @author sigit
  */
-public class UserController {
+public class UserController extends DefaultRequest {
 
     private final static String baseUri = "http://localhost:8080";
 
     public Response getAllUsers() {
-        Response response = given()
-                .log()
-                .all()
-                .baseUri(baseUri)
-                .basePath("/api")
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
+        Response response = service()
                 .get("/users");
 
         return response;
     }
 
     public Response getSingleUser(Long id) {
-        Response response = given()
-                .log()
-                .all()
-                .baseUri(baseUri)
-                .basePath("/api")
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
+        Response response = service()
                 .pathParam("id", id)
                 .get("/users/{id}");
 
@@ -45,13 +34,7 @@ public class UserController {
 
     public Response addUser(User userRequest) {
 
-        Response response = given()
-                .log()
-                .all()
-                .baseUri(baseUri)
-                .basePath("/api")
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
+        Response response = service()
                 .body(userRequest)
                 .post("/users");
 
