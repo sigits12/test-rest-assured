@@ -28,6 +28,7 @@ public class ApiJavaAutomationTest {
     @Test
     public void getAllUsers() {
         Response response = userController.getAllUsers();
+        response.getBody().prettyPrint();
         int statusCode = response.getStatusCode();
         Assert.assertEquals(200, statusCode);
         System.out.println("The response status is " + statusCode);
@@ -67,6 +68,30 @@ public class ApiJavaAutomationTest {
         System.out.println("name\t : " + userResponse.getName());
         System.out.println("country\t : " + userResponse.getCountry());
 
+    }
+
+    @Test
+    public void updateUsers() {
+        Response responseGetAll = userController.getAllUsers();
+        responseGetAll.getBody().prettyPrint();
+
+        Long id = new Long(responseGetAll.path("id[0]").toString());
+
+        Response responseBeforeUpdate = userController.getSingleUser(id);
+        responseBeforeUpdate.getBody().prettyPrint();
+
+        User userRequest = new User();
+        userRequest.setName(generateRandomName());
+        userRequest.setCountry(generateRandomCountry());
+
+        Response responseUpdate = userController.updateSingleUser(userRequest, id);
+
+        Response responseUpdatedUser = userController.getSingleUser(id);
+        responseUpdatedUser.getBody().prettyPrint();
+
+        int statusCode = responseUpdate.getStatusCode();
+        Assert.assertEquals(200, statusCode);
+        System.out.println("The response status is " + statusCode);
     }
 
 }

@@ -2,11 +2,8 @@ package controller;
 
 
 import defaultrequest.DefaultRequest;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import model.User;
-
-import static io.restassured.RestAssured.given;
 
 /**
  * Date 12/09/20
@@ -14,8 +11,6 @@ import static io.restassured.RestAssured.given;
  * @author sigit
  */
 public class UserController extends DefaultRequest {
-
-    private final static String baseUri = "http://localhost:8080";
 
     public Response getAllUsers() {
         Response response = service()
@@ -33,13 +28,20 @@ public class UserController extends DefaultRequest {
     }
 
     public Response addUser(User userRequest) {
-
         Response response = service()
                 .body(userRequest)
                 .post("/users");
 
         return response;
+    }
 
+    public Response updateSingleUser(User userRequest, Long id) {
+        Response response = service()
+                .body(userRequest)
+                .pathParam("id", id)
+                .put("/users/{id}");
+
+        return response;
     }
 
 }
